@@ -1,18 +1,32 @@
-const express = require('express');
-const router = express.Router();
+const urlParams = new URLSearchParams(window.location.search);
+const searchQuery = urlParams.get('search');
+document.getElementById('flightId').value = flightId;
 
-// Retorna todos os voos (mock ou do banco)
-router.get('/', (req, res) => {
-    res.json([
-        { id: 1, from: "São Paulo", to: "Rio de Janeiro", price: 200 },
-        { id: 2, from: "São Paulo", to: "Belo Horizonte", price: 250 }
-    ]);
+const form = document.getElementById('reservationForm');
+form.addEventListener('submit', async(e) => {
+    e.preventDefault();
+
+
+const reservationData = {
+    flightId: document.getElementById('flightId').value,
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+};
+
+try {
+    const response = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(reservationData),
+    });
+
+    const result = await response.json();
+    document.getElementById('result').innerText = result.message;
+
+    form.reset()
+} catch (error) {
+    document.getElementById('result').innerText = 'An error occurred while making the reservation.';
+    console.error('Error:', error);
+}
 });
 
-// Retorna detalhes de um voo
-router.get('/:id', (req, res) => {
-    const flightId = req.params.id;
-    res.json({ id: flightId, from: "São Paulo", to: "Rio de Janeiro", price: 200, duration: "1h10m" });
-});
-
-module.exports = router;
