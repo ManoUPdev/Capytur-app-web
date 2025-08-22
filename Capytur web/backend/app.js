@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Retorna todos os voos (mock ou do banco)
+// Retorna todos os voos (ahhh ou do banco)
 router.get('/', (req, res) => {
     res.json([
         { id: 1, from: "São Paulo", to: "Rio de Janeiro", price: 200 },
